@@ -9,30 +9,14 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/header.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/footer.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/board_left.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/board_write_main.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/member_join.css">
 </head>
 <body>
 <div id="wrap">
 <header>
   <a href="index"><img id="logo" src="${pageContext.request.contextPath }/resources/img/logo.png"></a>
 <nav id="top_menu">
-  HOME | 
-  <%
-  	String sessionId = (String)session.getAttribute("sessionId");    
-	if(sessionId == null) { 
-  
-  %>
-  LOGIN | 
- <%
-	} else {
- %>
-  <a href="logout">LOGOUT | </a>
-  <%
-	}
-  %>
-  
-  <a href="member_join">JOIN</a> | 
-  NOTICE
+  HOME | LOGIN | <a href="member_join">JOIN</a> | NOTICE
 </nav>
 <nav id="main_menu">
   <ul>
@@ -45,43 +29,21 @@
 </nav>
 </header> <!-- header -->
 <aside>
-  <%
-		if(sessionId == null) {
-	
-	%>
   <article id="login_box">
-    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
+    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">
     <div id="input_button">
-    <form action="memberLoginOk" method="post">
     <ul id="login_input">
-      <li><input type="text" name="mid"></li>
-      <li><input type="password" name="mpw"></li>
+      <li><input type="text"></li>
+      <li><input type="password"></li>
     </ul>
-    <!-- 
     <img id="login_btn" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
-     -->
-    <input type="image" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
-    </form>
     </div> 
     <div class="clear"></div>
     <div id="join_search">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif" href="">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">    
+      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif">
+      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">
     </div>
   </article>
-  <%
-		} else {
-  %>
-  	<article id="login_box">
-    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
-    <div id="input_button">
-    	<%=sessionId %>님 로그인 중입니다<br>
-    	<a href="logout">로그아웃</a>
-    </div>
-  </article>
-  <%
-		}
-  %>
   <nav id="sub_menu">
     <ul>
       <li><a href="board_list">+ 자유 게시판</a></li>
@@ -102,34 +64,29 @@
 
 <section id="main">
   <img src="${pageContext.request.contextPath }/resources/img/comm.gif">
-  <h2 id="board_title">자유 게시판 </h2>
-  <div id="write_title"><h2>글쓰기</h2></div>
-  <form action="board_writeOk" method="post">
+  <h2 id="board_title">RUBATO 회원 가입</h2>
+  <div id="write_title"><h2>회원 정보 입력</h2></div>
+  <form action="member_joinOk" method="post">
   <table>
-    <tr id="name">
-      <td class="col1">이름</td>
-      <td class="col2"><input type="text" name="fbname"></td>
+    <tr id="memberid">
+      <td class="col1">아이디</td>
+      <td class="col2"><input type="text" name="mid"></td>
     </tr>
-    <tr id="name">
-      <td class="col1">이메일</td>
-      <td class="col2"><input type="text" name="fbemail"></td>
-    </tr>
-    <tr id="subject">
-      <td class="col1">제목</td>
-      <td class="col2"><input type="text" name="fbtitle"></td>
+    <tr id="memberpw">
+      <td class="col1">비밀번호</td>
+      <td class="col2"><input type="password" name="mpw"></td>
     </tr>		
-    <tr id="content">
-      <td class="col1">내용</td>
-      <td class="col2"><textarea name="fbcontent"></textarea></td>
-    </tr>
-    <!-- 	
-    <tr id="upload">
-      <td class="col1">업로드 파일</td>
-      <td class="col2"><input type="file" name="files"></td>
-    </tr>
-     -->	
+    <tr id="membername">
+      <td class="col1">이름</td>
+      <td class="col2"><input type="text" name="mname"></td>
+    </tr>	
+    <tr id="memberemail">
+      <td class="col1">이메일</td>
+      <td class="col2"><input type="text" name="memail"></td>
+    </tr>	
   </table>
   <div id="buttons">
+    <!-- <a href="#"><img src="${pageContext.request.contextPath }/resources/img/ok.png"></a>-->
     <input type="image" src="${pageContext.request.contextPath }/resources/img/ok.png">
     <a href="board_list"><img src="${pageContext.request.contextPath }/resources/img/list.png"></a>
   </div>
