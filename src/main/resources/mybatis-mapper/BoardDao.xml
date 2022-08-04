@@ -40,13 +40,31 @@
 	    ORDER BY t1.fbnum DESC
 	</select>
 	
-	
 	<select id="fbNameSearchlist" resultType="com.haeun.rubato.dto.FBoardDto">
 		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
 	    FROM rubato_freeboard T1, rubato_member T2
 	    WHERE t1.fbid = t2.mid AND t2.mname LIKE '%' || #{param1} || '%'
 	    ORDER BY t1.fbnum DESC
 	</select>
-
-
+	
+	<!-- 첨부파일 SQL -->
+	<insert id="fbfileInsertDao">
+		INSERT INTO rubato_uploadfile(filenum, boardnum, filename, orifilename, fileurl, fileextension) 
+		VALUES (rubatofile_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4}, #{param5})
+	</insert>
+	
+	<!-- 게시글의 번호로 찾기 -->
+	<select id="fbGetFileInfoDao" resultType="com.haeun.rubato.dto.FileDto">
+		SELECT * FROM rubato_uploadfile WHERE boardnum=#{param1}	
+	</select>
+	
+	<!--  댓글 SQL -->
+	<insert id="rbwriteDao">
+		INSERT INTO rubato_replyboard(rbnum, boardnum, rbid, rbcontent) VALUES(rubatorb_seq.nextval, #{param1}, #{param2}, #{param3})
+	</insert>
+	
+	<!-- 해당 게시글 번호의 글을 오름차순으로 정렬 -->
+	<select id="rblistDao" resultType="com.haeun.rubato.dto.ReplyDto">
+		SELECT * FROM rubato_replyboard WHERE boardnum = #{param1} ORDER BY rbnum ASC
+	</select>
 </mapper>

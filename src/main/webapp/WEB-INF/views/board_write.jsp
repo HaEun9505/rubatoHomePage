@@ -104,7 +104,7 @@
   <img src="${pageContext.request.contextPath }/resources/img/comm.gif">
   <h2 id="board_title">자유 게시판 </h2>
   <div id="write_title"><h2>글쓰기</h2></div>
-  <form action="board_writeOk" method="post">
+  <form action="board_writeOk" method="post" enctype="multipart/form-data">
   <table>
   	<!-- 
     <tr id="name">
@@ -120,12 +120,11 @@
       <td class="col1">내용</td>
       <td class="col2"><textarea name="fbcontent"></textarea></td>
     </tr>
-    <!-- 	
+     	
     <tr id="upload">
       <td class="col1">업로드 파일</td>
-      <td class="col2"><input type="file" name="files"></td>
-    </tr>
-     -->	
+      <td class="col2"><input type="file" name="uploadfiles"></td>
+    </tr>	
   </table>
   <div id="buttons">
     <input type="image" src="${pageContext.request.contextPath }/resources/img/ok.png">

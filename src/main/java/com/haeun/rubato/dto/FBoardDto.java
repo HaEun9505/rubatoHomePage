@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class FBoardDto {
-	private String fbnum;		//게시판 번호
+	private int fbnum;			//게시판 번호
 	private String fbid;		//게시판 글쓴 아이디
 	private String fbcontent;	//게시판 글쓴 내용
 	private String fbtitle;		//게시판 글 제목
