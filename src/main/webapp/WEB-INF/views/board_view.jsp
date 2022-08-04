@@ -16,7 +16,23 @@
 <header>
   <a href="index"><img id="logo" src="${pageContext.request.contextPath }/resources/img/logo.png"></a>
 <nav id="top_menu">
-  HOME | LOGIN | JOIN | NOTICE
+  HOME | 
+  <%
+  	String sessionId = (String)session.getAttribute("sessionId");    
+	if(sessionId == null) { 
+  
+  %>
+  LOGIN | 
+ <%
+	} else {
+ %>
+  <a href="logout">LOGOUT | </a>
+  <%
+	}
+  %>
+  
+  <a href="member_join">JOIN</a> | 
+  NOTICE
 </nav>
 <nav id="main_menu">
   <ul>
@@ -29,21 +45,43 @@
 </nav>
 </header> <!-- header -->
 <aside>
+  <%
+		if(sessionId == null) {
+	
+	%>
   <article id="login_box">
-    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">
+    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
     <div id="input_button">
+    <form action="memberLoginOk" method="post">
     <ul id="login_input">
-      <li><input type="text"></li>
-      <li><input type="password"></li>
+      <li><input type="text" name="mid"></li>
+      <li><input type="password" name="mpw"></li>
     </ul>
+    <!-- 
     <img id="login_btn" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
+     -->
+    <input type="image" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
+    </form>
     </div> 
     <div class="clear"></div>
     <div id="join_search">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">
+      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif" href="">
+      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">    
     </div>
   </article>
+  <%
+		} else {
+  %>
+  	<article id="login_box">
+    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
+    <div id="input_button">
+    	<%=sessionId %>님 로그인 중입니다<br>
+    	<a href="logout">로그아웃</a>
+    </div>
+  </article>
+  <%
+		}
+  %>
   <nav id="sub_menu">
     <ul>
       <li><a href="board_list">+ 자유 게시판</a></li>
@@ -66,15 +104,11 @@
   <img src="${pageContext.request.contextPath }/resources/img/comm.gif">
   <h2 id="board_title">자유 게시판 </h2>
   <div id="view_title_box"> 
-    <span>까스통님의 선물인 보드카가 정말 독하네요!!!</span>
-    <span id="info">루바토 | 조회 : 208 | 2016-04-28 (09:20)</span>
+    <span>${fbView.fbtitle }</span>
+    <span id="info">글쓴이 : ${fbView.mname } | 조회수 : ${fbView.fbhit } | 게시일 : ${fbView.fbdate }</span>
   </div>	
   <p id="view_content">
-    까스통님 고맙습니다. <br>
-    까스통님 고맙습니다. <br>
-    까스통님 고맙습니다. <br>
-    까스통님 고맙습니다. <br>
-    까스통님 고맙습니다. <br>
+    ${fbView.fbcontent }
   </p>		
   <div id="comment_box">
     <img id="title_comment" src="${pageContext.request.contextPath }/resources/img/title_comment.gif">

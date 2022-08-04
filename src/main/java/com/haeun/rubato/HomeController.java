@@ -1,7 +1,11 @@
 package com.haeun.rubato;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.haeun.rubato.dao.BoardDao;
 import com.haeun.rubato.dao.MemberDao;
+import com.haeun.rubato.dto.FBoardDto;
 
 @Controller
 public class HomeController {
@@ -30,12 +36,50 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/board_list")
-	public String board_list() {
+	public String board_list(HttpServletRequest request, Model model) {
+		
+		String searchKeyword = request.getParameter("searchKeyword");
+		String searchOption = request.getParameter("searchOption");
+		
+		BoardDao boardDao = sqlSession.getMapper(BoardDao.class);
+		
+		
+		ArrayList<FBoardDto> fbDtos = null;
+		
+		if(searchKeyword == null) {	//검색한 단어가 없으면
+			fbDtos = boardDao.fblistDao();	//전체 조회
+		}else if(searchOption.equals("title")) {
+			fbDtos = boardDao.fbTitleSearchlist(searchKeyword);	//검색한 값 조회
+		}else if(searchOption.equals("content")) {
+			fbDtos = boardDao.fbContentSearchlist(searchKeyword);
+		}else if(searchOption.equals("writer")) {
+			fbDtos = boardDao.fbNameSearchlist(searchKeyword);
+		}
+		
+		//게시판 글목록의 글 개수
+		int listCount = fbDtos.size();
+		
+		//데이터를 model 객체에 실어서 전달
+		model.addAttribute("fblist", fbDtos);
+		model.addAttribute("listCount", listCount);
+		
 		return "board_list";
 	}
 	
 	@RequestMapping(value="/board_view")
-	public String board_view() {
+	public String board_view(HttpServletRequest request, Model model) {
+		
+		String fbnum = request.getParameter("fbnum");
+		
+		BoardDao boardDao = sqlSession.getMapper(BoardDao.class);
+		
+		boardDao.fbhitDao(fbnum);	//조회수 증가 함수 호출
+		
+		//FBoardDto를 반환
+		FBoardDto fboardDto = boardDao.fbViewDao(fbnum);
+		
+		model.addAttribute("fbView", fboardDto);
+		
 		return "board_view";
 	}
 	
@@ -120,5 +164,27 @@ public class HomeController {
 			
 		}
 		return "loginOk";
+	}
+	
+	@RequestMapping(value = "/board_writeOk", method = RequestMethod.POST)
+	public String board_writeOk(HttpServletRequest request) {
+		
+		String fbtitle = request.getParameter("fbtitle");
+		String fbcontent = request.getParameter("fbcontent");
+		
+		BoardDao boardDao = sqlSession.getMapper(BoardDao.class);
+
+		//세션에 저장한 값 가져오기
+		HttpSession session = request.getSession();
+		
+		String fbid = (String) session.getAttribute("sessionId");
+		
+		if(fbid == null) {	//로그인이 안되어있으면
+			fbid = "GUEST";
+		}
+		
+		boardDao.fbWriteDao(fbid, fbtitle, fbcontent);
+		
+		return "redirect:list";
 	}
 }

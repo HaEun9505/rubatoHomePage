@@ -18,7 +18,23 @@
 <header>
   <a href="index"><img id="logo" src="${pageContext.request.contextPath }/resources/img/logo.png"></a>
 <nav id="top_menu">
-  HOME | LOGIN | JOIN | NOTICE
+  HOME | 
+  <%
+  	String sessionId = (String)session.getAttribute("sessionId");    
+	if(sessionId == null) { 
+  
+  %>
+  LOGIN | 
+ <%
+	} else {
+ %>
+  <a href="logout">LOGOUT | </a>
+  <%
+	}
+  %>
+  
+  <a href="member_join">JOIN</a> | 
+  NOTICE
 </nav>
 <nav id="main_menu">
   <ul>
@@ -31,21 +47,43 @@
 </nav>
 </header> <!-- header -->
 <aside>
+  <%
+		if(sessionId == null) {
+	
+	%>
   <article id="login_box">
-    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">
+    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
     <div id="input_button">
+    <form action="memberLoginOk" method="post">
     <ul id="login_input">
-      <li><input type="text"></li>
-      <li><input type="password"></li>
+      <li><input type="text" name="mid"></li>
+      <li><input type="password" name="mpw"></li>
     </ul>
+    <!-- 
     <img id="login_btn" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
+     -->
+    <input type="image" src="${pageContext.request.contextPath }/resources/img/btn_login.gif">
+    </form>
     </div> 
     <div class="clear"></div>
     <div id="join_search">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif">
-      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">
+      <img src="${pageContext.request.contextPath }/resources/img/btn_join.gif" href="">
+      <img src="${pageContext.request.contextPath }/resources/img/btn_search.gif">    
     </div>
   </article>
+  <%
+		} else {
+  %>
+  	<article id="login_box">
+    <img id="login_title" src="${pageContext.request.contextPath }/resources/img/ttl_login.png">    
+    <div id="input_button">
+    	<%=sessionId %>님 로그인 중입니다<br>
+    	<a href="logout">로그아웃</a>
+    </div>
+  </article>
+  <%
+		}
+  %>
   <nav id="sub_menu">
     <ul>
       <li><a href="board_list">+ 자유 게시판</a></li>
@@ -67,19 +105,21 @@
     <img src="${pageContext.request.contextPath }/resources/img/comm.gif">
     <h2 id="board_title">자유 게시판 </h2>
     <div id="total_search">
-      <div id="total">▷ 총 5개의 게시물이 있습니다.</div>
+      <div id="total">▷ 총 ${listCount }개의 게시물이 있습니다.</div>
+      <form action="board_list">
       <div id="search">
         <div id="select_img"><img src="${pageContext.request.contextPath }/resources/img/select_search.gif"></div>
         <div id="search_select">
-          <select>
-            <option>제목</option>
-            <option>내용</option>
-            <option>글쓴이</option>
+          <select name="searchOption">
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="writer">글쓴이</option>
           </select> 
         </div>
-        <div id="search_input"><input type="text"></div>
-        <div id="search_btn"><img src="${pageContext.request.contextPath }/resources/img/search_button.gif"></div>
+        <div id="search_input"><input type="text" name="searchKeyword"></div>
+        <div id="search_btn"><input type="image" src="${pageContext.request.contextPath }/resources/img/search_button.gif"></div>      
       </div>
+      </form>
     </div>
     <table>
       <tr>
@@ -89,38 +129,29 @@
         <th>일시</th>
         <th>조회수</th>
       </tr>
+      
+      <c:forEach items="${fblist}" var="fbdto">
       <tr>
-        <td class="col1">1</td>
+      
+        <td class="col1">${fbdto.fbnum }</td>
         <td class="col2">
-          <a href="board_view">까스통님의 선물인 보드카가 정말 독하네요!!!</a>
+          <a href="board_view?fbnum=${fbdto.fbnum }">${fbdto.fbtitle }</a>
         </td>
-        <td class="col3">루바토</td>
-        <td class="col4">2017-09-20</td>
-        <td class="col5">15</td>
+        <td class="col3">${fbdto.mname }</td>
+        <td class="col4">
+        	<c:out value="${fn:substring(fbdto.fbdate,0,10) }"></c:out> 
+        </td>
+        <td class="col5">${fbdto.fbhit }</td>
       </tr>
-      <tr>
-        <td class="col1">2</td>
-        <td class="col2">
-          <a href="board_view">까스통님의 선물인 보드카가 정말 독하네요!!!</a>
-        </td>
-        <td class="col3">루바토</td>
-        <td class="col4">2017-09-20</td>
-        <td class="col5">15</td>
-      </tr>	
-      <tr>
-        <td class="col1">3</td>
-        <td class="col2">
-          <a href="board_view">까스통님의 선물인 보드카가 정말 독하네요!!!</a>
-        </td>
-        <td class="col3">루바토</td>
-        <td class="col4">2017-09-20</td>
-        <td class="col5">15</td>
-      </tr>
+      </c:forEach>
+      
     </table>
     <div id="buttons">
+    <!-- 
       <div class="col1">◀ 이전 1 다음 ▶</div>
+       -->
       <div class="col2">
-        <img src="${pageContext.request.contextPath }/resources/img/list.png"> 
+        <a href="board_list"><img src="${pageContext.request.contextPath }/resources/img/list.png"></a> 
         <a href="board_write"><img src="${pageContext.request.contextPath }/resources/img/write.png"></a>
       </div>
     </div>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="com.haeun.rubato.dao.BoardDao">
+
+	<insert id="fbWriteDao">
+		INSERT INTO rubato_freeboard(fbnum, fbid, fbtitle, fbcontent, fbhit, fbreplycount) VALUES(rubatofb_seq.nextval, #{param1}, #{param2}, #{param3}, 0, 0)
+	</insert>
+	
+	<select id="fblistDao" resultType="com.haeun.rubato.dto.FBoardDto">
+		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
+	    FROM rubato_freeboard T1, rubato_member T2
+	    WHERE t1.fbid = t2.mid
+	    ORDER BY t1.fbnum DESC
+	</select>
+	
+	<select id="fbViewDao" resultType="com.haeun.rubato.dto.FBoardDto">
+		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
+	    FROM rubato_freeboard T1, rubato_member T2
+	    WHERE t1.fbid = t2.mid AND t1.fbnum = #{param1}
+	</select>
+	
+	<update id="fbhitDao">
+		UPDATE rubato_freeboard SET fbhit=fbhit+1 WHERE fbnum=#{param1}
+	</update>
+	
+	<select id="fbTitleSearchlist" resultType="com.haeun.rubato.dto.FBoardDto">
+		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
+	    FROM rubato_freeboard T1, rubato_member T2
+	    WHERE t1.fbid = t2.mid AND fbtitle LIKE '%' || #{param1} || '%'
+	    ORDER BY t1.fbnum DESC
+	</select>
+	
+	<select id="fbContentSearchlist" resultType="com.haeun.rubato.dto.FBoardDto">
+		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
+	    FROM rubato_freeboard T1, rubato_member T2
+	    WHERE t1.fbid = t2.mid AND fbcontent LIKE '%' || #{param1} || '%'
+	    ORDER BY t1.fbnum DESC
+	</select>
+	
+	
+	<select id="fbNameSearchlist" resultType="com.haeun.rubato.dto.FBoardDto">
+		SELECT T1.fbnum, t1.fbid, t1.fbtitle, t1.fbcontent, t1.fbdate, t1.fbhit, t1.fbreplycount, t2.mname
+	    FROM rubato_freeboard T1, rubato_member T2
+	    WHERE t1.fbid = t2.mid AND t2.mname LIKE '%' || #{param1} || '%'
+	    ORDER BY t1.fbnum DESC
+	</select>
+
+
+</mapper>

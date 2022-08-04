@@ -106,14 +106,12 @@
   <div id="write_title"><h2>글쓰기</h2></div>
   <form action="board_writeOk" method="post">
   <table>
+  	<!-- 
     <tr id="name">
       <td class="col1">이름</td>
       <td class="col2"><input type="text" name="fbname"></td>
     </tr>
-    <tr id="name">
-      <td class="col1">이메일</td>
-      <td class="col2"><input type="text" name="fbemail"></td>
-    </tr>
+     -->    
     <tr id="subject">
       <td class="col1">제목</td>
       <td class="col2"><input type="text" name="fbtitle"></td>
